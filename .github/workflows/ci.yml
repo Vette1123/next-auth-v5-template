@@ -10,6 +10,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18.x'
+          cache: 'pnpm'
+
       - name: Install Dependencies
         run: pnpm install
 
