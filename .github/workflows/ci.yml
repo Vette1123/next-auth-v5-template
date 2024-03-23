@@ -20,5 +20,17 @@ jobs:
       - name: Typecheck
         run: pnpm run prettier:check
 
-      # - name: Lint
-      #   run: pnpm run prettier:format
+      - name: Lint and Format
+        run: |
+          prettier_status=0
+          pnpm run prettier:format || prettier_status=$?
+
+          if [ $prettier_status -ne 0 ]; then
+            echo "Prettier found code style issues that could not be fixed automatically."
+          else
+            git config --global user.name 'GitHub Actions Bot'
+            git config --global user.email 'actions@github.com'
+            git add .
+            git diff-index --quiet HEAD || git commit -m "Automated prettier formatting"
+            git push origin HEAD:main
+          fi
